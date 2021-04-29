@@ -54,12 +54,15 @@ class SudokuSolver {
 			row_string = puzzleString.substr(index, 9);
 			break;
 		}
-		if (row_string[column - 1] != "." && row_string[column - 1] != value) {
+		if (
+			row_string[column - 1] != "." &&
+			row_string[column - 1] != value
+		) {
 			return false;
 		}
 		for (let index = 0; index < 9; index++) {
 			const char = row_string[index];
-			if (char == ".") {
+			if (char == "." || index == column - 1) {
 				continue;
 			}
 			if (char == value) {
@@ -96,12 +99,15 @@ class SudokuSolver {
 		) {
 			col_string += puzzleString[index];
 		}
-		if (col_string[row] != "." && col_string[row] != value) {
+		if (
+			col_string[row] != "." &&
+			col_string[row] != value
+		) {
 			return false;
 		}
 		for (let index = 0; index < 9; index++) {
 			const char = col_string[index];
-			if (char == ".") {
+			if (char == "." || index == row) {
 				continue;
 			}
 			if (char == value) {
@@ -137,17 +143,22 @@ class SudokuSolver {
 		let start_row = 0;
 		let end_row = 3;
 		let current_region = 1;
+		let region_index = null;
 		while (true) {
 			let string = "";
 			for (let r = start_row; r < end_row; r++) {
 				for (let c = start_col; c < end_col; c++) {
+					string += puzzleString[r * 9 + c];
 					if (r == row && c == column - 1) {
 						region = current_region;
-						if (puzzleString[r * 9 + c] != "." && puzzleString[r * 9 + c] != value) {
+						if (
+							puzzleString[r * 9 + c] != "." &&
+							puzzleString[r * 9 + c] != value
+						) {
 							return false;
 						}
+						region_index = string.length - 1;
 					}
-					string += puzzleString[r * 9 + c];
 				}
 			}
 			regions[current_region] = string;
@@ -172,6 +183,9 @@ class SudokuSolver {
 			index < regions[region].length;
 			index++
 		) {
+			if (index == region_index) {
+				continue;
+			}
 			if (value == regions[region][index]) {
 				return false;
 			}
@@ -183,9 +197,9 @@ class SudokuSolver {
 		const isValid = this.validate(puzzleString);
 		if (isValid[0] == false) {
 			if (isValid[1] != "") {
-				return {error: isValid[1]};
+				return { error: isValid[1] };
 			} else {
-				return {error: "Puzzle cannot be solved"};
+				return { error: "Puzzle cannot be solved" };
 			}
 		}
 		const rows = {
@@ -248,7 +262,7 @@ class SudokuSolver {
 							num
 						);
 						if (!check1) {
-							return {error: "Puzzle cannot be solved"};
+							return { error: "Puzzle cannot be solved" };
 						}
 						const check2 = this.checkColPlacement(
 							puzzleString,
@@ -257,7 +271,7 @@ class SudokuSolver {
 							num
 						);
 						if (!check2) {
-							return {error: "Puzzle cannot be solved"};
+							return { error: "Puzzle cannot be solved" };
 						}
 						const check3 = this.checkRegionPlacement(
 							puzzleString,
@@ -266,7 +280,7 @@ class SudokuSolver {
 							num
 						);
 						if (!check3) {
-							return {error: "Puzzle cannot be solved"};
+							return { error: "Puzzle cannot be solved" };
 						}
 						puzzleString =
 							puzzleString.slice(0, r * 9 + c) +
@@ -287,7 +301,7 @@ class SudokuSolver {
 				break;
 			}
 		}
-		return {solution: puzzleString};
+		return { solution: puzzleString };
 	}
 }
 
