@@ -5,6 +5,11 @@ const SudokuSolver = require("../controllers/sudoku-solver.js");
 module.exports = function (app) {
 	let solver = new SudokuSolver();
 
+	//Index page (static HTML)
+	app.route("/").get(function (req, res) {
+		res.sendFile(process.cwd() + "/views/index.html");
+	});
+
 	app.route("/api/check").post((req, res) => {
 		const puzzle = req.body.puzzle;
 		const coordinate = req.body.coordinate;
