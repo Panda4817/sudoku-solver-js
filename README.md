@@ -6,5 +6,6 @@ A freecodecamp project for the quality assurance certificate. A full stack JavaS
 ## Usage on local machine
 
 - Add `NODE_ENV=test` to `.env`
-- run `npm start` to run all 27 tests
+- Add `PORT=8080` to `.env`
+- run `npm install && npm start` to run all 27 tests and start node server
 - Open `localhost:8080` on browser to see frontend
